@@ -10,8 +10,5 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
 
-[project.scripts]
-dune-fox = "dune_fox.cli:main"
-
-[tool.setuptools.packages.find]
-include = ["dune_fox*"]
+[tool.setuptools]
+py-modules = ["dune_fox"]
