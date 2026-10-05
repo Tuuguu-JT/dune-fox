@@ -1,31 +1,29 @@
 # dune-fox
 
-Poll a **FLYDIGI Dune Fox** over the **FlySync** dongle (or USB-C). On Windows the dongle is an XInput pad.
-
-`pip install -e .` from this folder, then call `poll()` from your own loop.
+Poll a **FLYDIGI Dune Fox** on Windows or Linux. Use the FlySync dongle or USB-C in XInput mode (hold **FN + A** until the LED is yellow).
 
 ```python
-from dune_fox import DuneFox
+from dune_fox import poll
 
-fox = DuneFox()
-while True:
-    if not fox.connected():
-        continue
-    pad = fox.poll()
-    if pad is None:
-        continue
-    if pad.A:
-        ...
+pad = poll()          # None when the pad is unplugged
+if pad and pad.A:
     move_x, move_y = pad.lx, pad.ly
 ```
 
+`python -m dune_fox` prints every button, both sticks, and both triggers on one fixed line.
+
 | Call | Use |
 | --- | --- |
-| `connected()` | True when a pad answers on slots 0–3. |
-| `poll()` | Current buttons and sticks, or `None` if the pad is gone. |
+| `poll()` | Current sample, or `None` if the pad is gone. |
+| `connected()` | True when `poll()` would return a pad. |
+| `line(pad)` | Fixed-width text for `poll()`, including the disconnected line. |
 
-Buttons on `Pad`: `A` `B` `X` `Y` `LB` `RB` `LS` `RS` `START` `BACK` `DPAD_U` `DPAD_D` `DPAD_L` `DPAD_R`. Sticks are `-1..1` (`lx` `ly` `rx` `ry`). Triggers are `0..1` (`lt` `rt`).
+Buttons: `A` `B` `X` `Y` `LB` `RB` `LS` `RS` `START` `BACK` `DPAD_U` `DPAD_D` `DPAD_L` `DPAD_R`. Sticks `lx` `ly` `rx` `ry` are `-1..1` with up and right positive. Triggers `lt` `rt` are `0..1`.
 
-PC X-input: hold **FN + A** until the LED is yellow. Pairing pinhole on the FlySync receiver if it will not bind.
+On Linux the dongle is an Xbox 360 pad. Your user needs access to `/dev/input`:
 
-Host sketch: `examples/plug_play.py`.
+```bash
+sudo usermod -aG input $USER
+```
+
+Log out and back in after that. Pairing pinhole on the FlySync receiver if it will not bind.

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "dune-fox"
 version = "0.1.0"
-description = "Plug-and-play FLYDIGI Dune Fox reader over FlySync / XInput"
+description = "Poll a FLYDIGI Dune Fox on Windows and Linux"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
