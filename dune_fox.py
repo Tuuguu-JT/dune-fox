@@ -61,8 +61,18 @@ class Pad:
     rt: float = 0.0
 
 
-def poll() -> Pad | None:
-    """Current pad data, or None when nothing is connected."""
+def poll() -> Pad:
+    """Current pad data. Every field is 0 when the pad is missing or the link just dropped."""
+    pad = _device().read()
+    return Pad() if pad is None else pad
+
+
+def connected() -> bool:
+    """True when a pad is connected."""
+    return _device().read() is not None
+
+
+def _device():
     global _dev
     if _dev is None:
         if sys.platform == "win32":
@@ -71,12 +81,7 @@ def poll() -> Pad | None:
             _dev = _Evdev()
         else:
             raise OSError("dune_fox supports Windows and Linux")
-    return _dev.read()
-
-
-def connected() -> bool:
-    """True when a pad is connected."""
-    return poll() is not None
+    return _dev
 
 
 def _dead_stick(x: float) -> float:

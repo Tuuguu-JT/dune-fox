@@ -21,18 +21,19 @@ from dune_fox import poll
 
 while True:
     pad = poll()
-    if pad is None:
-        continue  # unplugged or asleep
 
+    # Link lost: sticks, triggers, and buttons are already 0.
+    # Following is just an example. If A is pressed, confirm() runs.
+    # If the right trigger is past halfway, boost() runs.
     if pad.A:
-        confirm()
-    if pad.RT > 0.5:
-        boost()
+        confirm()  # your function
+    if pad.rt > 0.5:
+        boost()    # your function
 
     drive(pad.lx, pad.ly)  # left stick, -1..1
 ```
 
-`poll()` returns one fresh sample each time you call it, or `None` when no pad is connected. Read the fields on that object. A button is `True` for as long as it is held down.
+`poll()` returns one fresh sample each time you call it. If the pad drops out while you are polling, that sample is all zeros, so the last stick position is not left behind. A button is `True` only while it is held and the pad is still connected.
 
 `connected()` is only the connection check. It does not return the sticks or buttons.
 

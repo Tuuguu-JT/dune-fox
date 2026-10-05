@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import time
 
-from dune_fox import Pad, poll
+from dune_fox import Pad, connected, poll
 
 
 def status(pad: Pad) -> str:
@@ -26,7 +26,7 @@ def main() -> None:
     try:
         while True:
             pad = poll()
-            print(_OFFLINE if pad is None else status(pad), end="\r", flush=True)
+            print(_OFFLINE if not connected() else status(pad), end="\r", flush=True)
             time.sleep(0.05)
     except PermissionError as exc:
         print(exc)
